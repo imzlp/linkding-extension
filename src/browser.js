@@ -36,6 +36,22 @@ export async function getBrowserMetadata() {
     return { title: "", description: "" };
   };
 
+  // Check if the URL is a restricted page (chrome://, edge://, about:, etc.)
+  if (!tab || !tab.url) {
+    return { title: "", description: "" };
+  }
+
+  const isRestrictedUrl =
+    tab.url.startsWith("chrome://") ||
+    tab.url.startsWith("edge://") ||
+    tab.url.startsWith("about:") ||
+    tab.url.startsWith("chrome-extension://") ||
+    tab.url.startsWith("moz-extension://");
+
+  if (isRestrictedUrl) {
+    return { title: tab.title || "", description: "" };
+  }
+
   if (useChromeScripting()) {
     function getMetadata() {
       const title =
