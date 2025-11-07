@@ -7,6 +7,7 @@ const DEFAULTS = {
   default_tags: "",
   useBrowserMetadata: false,
   runSinglefile: false,
+  singlefileSelected: false,
   precacheEnabled: false,
   closeAddBookmarkWindowOnSave: false,
   closeAddBookmarkWindowOnSaveMs: 500,

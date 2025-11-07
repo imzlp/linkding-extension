@@ -28,6 +28,7 @@ export class PopupForm extends LitElement {
     autoTags: { type: String, state: true },
     unread: { type: Boolean, state: true },
     shared: { type: Boolean, state: true },
+    runSinglefileForThis: { type: Boolean, state: true },
     saveState: { type: String, state: true },
     errorMessage: { type: String, state: true },
     availableTagNames: { type: Array, state: true },
@@ -54,6 +55,7 @@ export class PopupForm extends LitElement {
     this.autoTags = "";
     this.unread = false;
     this.shared = false;
+    this.runSinglefileForThis = false;
     this.saveState = "";
     this.errorMessage = "";
     this.availableTagNames = [];
@@ -132,6 +134,7 @@ export class PopupForm extends LitElement {
 
     this.shared = this.configuration.shareSelected;
     this.unread = this.configuration.unreadSelected;
+    this.runSinglefileForThis = this.configuration.singlefileSelected;
 
     // If the bookmark already exists, prefill the form with the existing bookmark
     if (!serverMetadata) {
@@ -180,7 +183,7 @@ export class PopupForm extends LitElement {
       this.saveState = "loading";
 
       await this.api.saveBookmark(bookmark, {
-        disable_html_snapshot: this.extensionConfiguration?.runSinglefile,
+        disable_html_snapshot: this.runSinglefileForThis,
       });
       await clearCachedServerMetadata();
 
@@ -203,11 +206,8 @@ export class PopupForm extends LitElement {
         }, this.extensionConfiguration?.closeAddBookmarkWindowOnSaveMs);
       }
 
-      // Run singlefile, if configured
-      if (
-        !this.existingBookmark &&
-        this.extensionConfiguration?.runSinglefile
-      ) {
+      // Run singlefile, if selected
+      if (!this.existingBookmark && this.runSinglefileForThis) {
         runSinglefile();
       }
     } catch (e) {
@@ -402,6 +402,22 @@ export class PopupForm extends LitElement {
               `
             : ""}
         </div>
+        ${!this.existingBookmark
+          ? html`
+              <div class="form-group">
+                <label class="form-checkbox">
+                  <input
+                    type="checkbox"
+                    .checked="${this.runSinglefileForThis}"
+                    @change="${(e) =>
+                      this.handleInputChange(e, "runSinglefileForThis")}"
+                  />
+                  <i class="form-icon"></i>
+                  <span>Backup to Singlefile</span>
+                </label>
+              </div>
+            `
+          : ""}
         <div class="footer">
           ${this.saveState === "success"
             ? html`

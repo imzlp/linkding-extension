@@ -12,6 +12,7 @@ export class Options extends LitElement {
     shareSelected: { type: Boolean, state: true },
     useBrowserMetadata: { type: Boolean, state: true },
     runSinglefile: { type: Boolean, state: true },
+    singlefileSelected: { type: Boolean, state: true },
     precacheEnabled: { type: Boolean, state: true },
     closeAddBookmarkWindowOnSave: { type: Boolean, state: true },
     closeAddBookmarkWindowOnSaveMs: { type: Number, state: true },
@@ -28,6 +29,7 @@ export class Options extends LitElement {
     this.shareSelected = false;
     this.useBrowserMetadata = false;
     this.runSinglefile = false;
+    this.singlefileSelected = false;
     this.precacheEnabled = false;
     this.closeAddBookmarkWindowOnSave = false;
     this.closeAddBookmarkWindowOnSaveMs = 500;
@@ -55,6 +57,7 @@ export class Options extends LitElement {
     this.shareSelected = config.shareSelected;
     this.useBrowserMetadata = config.useBrowserMetadata;
     this.runSinglefile = config.runSinglefile;
+    this.singlefileSelected = config.singlefileSelected;
     this.precacheEnabled = config.precacheEnabled;
     this.closeAddBookmarkWindowOnSave = config.closeAddBookmarkWindowOnSave;
     this.closeAddBookmarkWindowOnSaveMs = config.closeAddBookmarkWindowOnSaveMs;
@@ -70,6 +73,7 @@ export class Options extends LitElement {
       shareSelected: this.shareSelected,
       useBrowserMetadata: this.useBrowserMetadata,
       runSinglefile: this.runSinglefile,
+      singlefileSelected: this.singlefileSelected,
       precacheEnabled: this.precacheEnabled,
       closeAddBookmarkWindowOnSave: this.closeAddBookmarkWindowOnSave,
       closeAddBookmarkWindowOnSaveMs: this.closeAddBookmarkWindowOnSaveMs,
@@ -231,6 +235,21 @@ export class Options extends LitElement {
               >documentation</a
             >
             for more information.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-checkbox">
+            <input
+              type="checkbox"
+              .checked="${this.singlefileSelected}"
+              @change="${(e) => this.handleInputChange(e, "singlefileSelected")}"
+            />
+            <i class="form-icon"></i>
+            <span>Pre-select backup to Singlefile when adding bookmark</span>
+          </label>
+          <div class="form-input-hint">
+            Pre-selects the backup to Singlefile checkbox when adding a new bookmark. This allows you to control whether to backup each bookmark to Singlefile individually.
           </div>
         </div>
 
